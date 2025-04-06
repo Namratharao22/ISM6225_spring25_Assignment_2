@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Assignment_2
 {
@@ -63,7 +64,19 @@ namespace Assignment_2
             try
             {
                 // Write your code here
-                return new List<int>(); // Placeholder
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    int index = Math.Abs(nums[i]) - 1;
+                    if (nums[index] > 0) nums[index] = -nums[index];
+                }
+
+                List<int> missing = new List<int>();
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (nums[i] > 0) missing.Add(i + 1); // Edge case: Duplicates and missing numbers are handled using absolute values
+                }
+                return missing; 
+
             }
             catch (Exception)
             {
@@ -76,8 +89,22 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return new int[0]; // Placeholder
+                int left = 0, right = nums.Length - 1;
+
+                while (left < right)
+                {
+                    if (nums[left] % 2 > nums[right] % 2)
+                    {
+                        int temp = nums[left];
+                        nums[left] = nums[right];
+                        nums[right] = temp;
+                    }
+
+                    if (nums[left] % 2 == 0) left++;  // Edge case: Handles both negative numbers and zero correctly
+                    if (nums[right] % 2 == 1) right--;
+                }
+
+                return nums; // Edge case: Empty array handled naturally, also handles all odd or all even arrays
             }
             catch (Exception)
             {
@@ -91,7 +118,17 @@ namespace Assignment_2
             try
             {
                 // Write your code here
-                return new int[0]; // Placeholder
+                Dictionary<int, int> map = new Dictionary<int, int>();
+
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    int complement = target - nums[i];
+                    if (map.ContainsKey(complement)) return new int[] { map[complement], i }; // Edge case: Handles duplicate values correctly
+                    map[nums[i]] = i;
+                }
+
+                return new int[0]; // Edge case: No pair found, returns an empty array
+
             }
             catch (Exception)
             {
@@ -105,7 +142,22 @@ namespace Assignment_2
             try
             {
                 // Write your code here
-                return 0; // Placeholder
+                if (nums.Length < 3) return 0; // Edge case: Less than 3 elements returns 0
+
+                int max1 = int.MinValue, max2 = int.MinValue, max3 = int.MinValue;
+                int min1 = int.MaxValue, min2 = int.MaxValue;
+
+                foreach (int num in nums)
+                {
+                    if (num > max1) { max3 = max2; max2 = max1; max1 = num; }
+                    else if (num > max2) { max3 = max2; max2 = num; }
+                    else if (num > max3) max3 = num;
+
+                    if (num < min1) { min2 = min1; min1 = num; }
+                    else if (num < min2) min2 = num;
+                }
+
+                return Math.Max(max1 * max2 * max3, min1 * min2 * max1); // Edge case: Handles array with all positive or negative values
             }
             catch (Exception)
             {
@@ -119,7 +171,17 @@ namespace Assignment_2
             try
             {
                 // Write your code here
-                return "101010"; // Placeholder
+                if (decimalNumber == 0) return "0"; // Edge case: Handles 0 input
+
+                StringBuilder binary = new StringBuilder();
+
+                while (decimalNumber > 0)
+                {
+                    binary.Insert(0, decimalNumber % 2); // Edge case: Works correctly for large numbers
+                    decimalNumber /= 2;
+                }
+
+                return binary.ToString();
             }
             catch (Exception)
             {
@@ -127,13 +189,25 @@ namespace Assignment_2
             }
         }
 
+
         // Question 6: Find Minimum in Rotated Sorted Array
         public static int FindMin(int[] nums)
         {
             try
             {
                 // Write your code here
-                return 0; // Placeholder
+                int left = 0, right = nums.Length - 1;
+
+                if (nums[left] <= nums[right]) return nums[left]; // Edge case: Array not rotated, returns the first element
+
+                while (left < right)
+                {
+                    int mid = left + (right - left) / 2;
+                    if (nums[mid] > nums[right]) left = mid + 1; // Edge case: Properly handles rotated sorted arrays
+                    else right = mid;
+                }
+
+                return nums[left]; 
             }
             catch (Exception)
             {
@@ -147,7 +221,18 @@ namespace Assignment_2
             try
             {
                 // Write your code here
-                return false; // Placeholder
+                if (x < 0) return false; // Edge case: Negative numbers are not palindromes
+                if (x == 0) return true; // Edge case: 0 is a palindrome
+                int original = x, reversed = 0;
+
+                while (x != 0)
+                {
+                    int digit = x % 10;
+                    reversed = reversed * 10 + digit;
+                    x /= 10;
+                }
+
+                return original == reversed; // Edge case: Numbers ending in 0 are not palindromes, except for 0 itself
             }
             catch (Exception)
             {
@@ -161,7 +246,18 @@ namespace Assignment_2
             try
             {
                 // Write your code here
-                return 0; // Placeholder
+                if (n <= 1) return n; // Edge case: Returns n directly for n = 0 or n = 1
+
+                int a = 0, b = 1;
+
+                for (int i = 2; i <= n; i++)
+                {
+                    int temp = a + b;
+                    a = b;
+                    b = temp;
+                }
+
+                return b; // Edge case: Handles larger Fibonacci numbers correctly
             }
             catch (Exception)
             {
@@ -170,3 +266,5 @@ namespace Assignment_2
         }
     }
 }
+    
+    
